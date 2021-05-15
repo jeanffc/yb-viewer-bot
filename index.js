@@ -1,4 +1,6 @@
-const puppeteer = require("puppeteer");
+const puppeteer = require("puppeteer-extra");
+const StealthPlugin = require("puppeteer-extra-plugin-stealth");
+puppeteer.use(StealthPlugin());
 
 // https://hidemy.name/en/proxy-list/?maxtime=100#list
 // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -51,7 +53,8 @@ async function bot(value) {
     const max = 120000; // todo: calculate the max duration
     const time = random(min, max);
 
-    await delay(time);
+    // await delay(time);
+    await page.waitForTimeout(time);
     console.log(`watched ${time} seconds`);
 
     await page.screenshot({ path: `screenshot-${value}.png` });
