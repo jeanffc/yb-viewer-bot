@@ -4,8 +4,8 @@ puppeteer.use(StealthPlugin());
 
 // https://hidemy.name/en/proxy-list/?maxtime=100#list
 // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-// const arr = [1, 2, 3, 4, 5];
-const arr = [1];
+const arr = [1, 2, 3, 4, 5];
+// const arr = [1];
 arr.map(async (value, index, arr) => {
   await bot(value);
 });
@@ -43,7 +43,15 @@ async function bot(value) {
       console.log("Is using Tor. Continuing...");
     }
 
-    await page.goto("https://www.youtube.com/watch?v=6uxlwvwn7lo");
+    await page.goto("https://api.ipify.org/");
+    await page.waitForSelector("body");
+    console.log(
+      await page.evaluate(() => document.querySelector("body").innerText)
+    );
+
+    await page.goto("https://www.youtube.com/watch?v=6uxlwvwn7lo", {
+      waitUntil: "load",
+    });
     console.log("page opened");
 
     await page.click("button.ytp-play-button");
@@ -76,3 +84,8 @@ function delay(time) {
 function random(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
+
+const getCurrentIP = async (page) => {
+  await page.goto("https://api.ipify.org/", { waitUntil: "load" });
+  return await page.$eval("body", (body) => body.innerText);
+};
